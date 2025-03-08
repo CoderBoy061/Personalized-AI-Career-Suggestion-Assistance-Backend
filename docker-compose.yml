@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+
+  backend:
+    build: .
+    container_name: server
+    restart: always
+    environment:
+      - MONGO_URI=mongodb+srv://debabratabasak061:V1u5SDFJjbOCRBVO@furryfriend.joap0.mongodb.net/?retryWrites=true&w=majority&appName=furryFriend
+    depends_on:
+      - redis
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/app # ✅ Local project folder mount korchi
+      - /app/node_modules # ✅ Prevent node_modules override
+    command: npm run dev # ✅ Run with nodemon for auto-restart
+
